@@ -1,0 +1,31 @@
+server:
+  port: 8082
+
+keycloak:
+  realm: pegasus
+  auth-server-url: http://localhost:8081/auth/
+  ssl-required: external
+  resource: messenger-server
+  credentials:
+    secret: 8c52ccfb-4c15-4e4c-8e0b-a10f1cc978cd
+  use-resource-role-mappings: true
+  verify-token-audience: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pegasus_messenger
+    driver-class-name: org.postgresql.Driver
+    username: pegasus
+    password: pegasus
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yml
+    contexts: dev
