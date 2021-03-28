@@ -40,7 +40,6 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     super.configure(http);
     http.authorizeRequests()
       .anyRequest().hasRole("user");
-    http.cors().disable();
   }
 
 }
