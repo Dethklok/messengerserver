@@ -1,30 +1,48 @@
 package com.pegasus.messengerserver.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.pegasus.messengerserver.entity.Message;
+import com.pegasus.messengerserver.repository.MessageRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("message")
+@AllArgsConstructor
 public class MessageController {
+  private final MessageRepository messageRepository;
 
   @GetMapping
-  public List<Map<String, String>> getAll() {
-    return new ArrayList<Map<String, String>>() {{
-      add(new HashMap<String, String>() {{
-        put("id", "1");
-        put("text", "First text");
-      }});
-      add(new HashMap<String, String>() {{
-        put("id", "2");
-        put("text", "Second text");
-      }});
-    }};
+  public List<Message> getAll(HttpServletResponse response) {
+    response.setHeader("Set-Cookie", "mycookie=hello; HttpOnly; SameSite=localhost; Path=/; Max-Age=99999999;");
+    return messageRepository.findAll();
+  }
+
+  @GetMapping("/{id}")
+  public Message findOne(@PathVariable("id") Message message) {
+    return message;
+  }
+
+  @PostMapping
+  public Message save(@RequestBody Message message) {
+    return messageRepository.save(message);
+  }
+
+  @PutMapping("/{id}")
+  public Message update(
+    @PathVariable("id") Message messageFromDB,
+    @RequestBody Message message) {
+    BeanUtils.copyProperties(message, messageFromDB, "id");
+    return messageRepository.save(messageFromDB);
+  }
+
+  @DeleteMapping("/{id}")
+  public void delete(@PathVariable long id) {
+    messageRepository.deleteById(id);
   }
 
 }
