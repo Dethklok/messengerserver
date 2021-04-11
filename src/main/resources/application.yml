@@ -33,3 +33,7 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yml
     contexts: dev
+
+logging:
+  level:
+    root: WARN
