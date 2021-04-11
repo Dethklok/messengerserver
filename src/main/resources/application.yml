@@ -15,6 +15,15 @@ keycloak:
   verify-token-audience: true
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        opaque:
+          introspection-uri: http://localhost:8081/auth/realms/pegasus/protocol/openid-connect/token/introspect
+          introspection-client-id: messenger-server
+          introspection-client-secret: 8c52ccfb-4c15-4e4c-8e0b-a10f1cc978cd
+#        jwt:
+#          jwk-set-uri: http://localhost:8081/auth/realms/pegasus/protocol/openid-connect/certs
   datasource:
     url: jdbc:postgresql://localhost:5432/pegasus_messenger
     driver-class-name: org.postgresql.Driver
