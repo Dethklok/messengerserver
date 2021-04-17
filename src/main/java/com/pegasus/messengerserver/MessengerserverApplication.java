@@ -13,17 +13,18 @@ public class MessengerserverApplication {
 		SpringApplication.run(MessengerserverApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedOrigins("http://localhost:4200")
-					.allowedHeaders("Content-Type", "Authorization")
-					.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**")
+//					.allowedOrigins("http://localhost:4200")
+//					.allowedHeaders("Content-Type", "Authorization")
+//					.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//					.allowCredentials(true);
+//			}
+//		};
+//	}
 
 }

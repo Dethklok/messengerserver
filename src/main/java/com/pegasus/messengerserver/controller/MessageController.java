@@ -5,6 +5,8 @@ import com.pegasus.messengerserver.repository.MessageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +45,12 @@ public class MessageController {
   @DeleteMapping("/{id}")
   public void delete(@PathVariable long id) {
     messageRepository.deleteById(id);
+  }
+
+  @MessageMapping("/changeMessage")
+  @SendTo("/topic/activity")
+  public Message saveMessage(Message message) {
+    return messageRepository.save(message);
   }
 
 }
