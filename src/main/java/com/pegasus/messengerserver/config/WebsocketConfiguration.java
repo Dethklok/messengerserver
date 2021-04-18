@@ -10,7 +10,9 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -45,11 +47,13 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
       public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-          String token = accessor.getFirstNativeHeader("Authorization").replaceAll("Bearer ", "");
+        if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+          String token = accessor.getFirstNativeHeader("Authorization");
 
-          BearerTokenAuthenticationToken bearerTokenAuthenticationToken = new BearerTokenAuthenticationToken(token);
-          Authentication authentication = opaqueTokenAuthenticationProvider.authenticate(bearerTokenAuthenticationToken);
+          if (token == null) throw new AuthenticationCredentialsNotFoundException("Authorization header is not found");
+
+          BearerTokenAuthenticationToken bearerToken = new BearerTokenAuthenticationToken(token.replaceAll("Bearer ", ""));
+          Authentication authentication = opaqueTokenAuthenticationProvider.authenticate(bearerToken);
           accessor.setUser(authentication);
         }
 
