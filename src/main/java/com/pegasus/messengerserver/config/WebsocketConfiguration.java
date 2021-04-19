@@ -1,6 +1,7 @@
 package com.pegasus.messengerserver.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -12,7 +13,6 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -26,15 +26,24 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
   private final OpaqueTokenAuthenticationProvider opaqueTokenAuthenticationProvider;
 
+  @Value("${websocket.message-broker-prefix}")
+  private String messageBrokerPrefix;
+
+  @Value("${websocket.destination-prefix}")
+  private String destinationPrefix;
+
+  @Value("${websocket.registry-endpoint}")
+  private String registryEndpoint;
+
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.enableSimpleBroker("/topic");
-    registry.setApplicationDestinationPrefixes("/app");
+    registry.enableSimpleBroker(messageBrokerPrefix);
+    registry.setApplicationDestinationPrefixes(destinationPrefix);
   }
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/socket")
+    registry.addEndpoint(registryEndpoint)
       .setAllowedOrigins("http://localhost:4200")
       .withSockJS()
       .setSessionCookieNeeded(false);

@@ -9,8 +9,6 @@ spring:
           introspection-uri: http://localhost:8081/auth/realms/pegasus/protocol/openid-connect/token/introspect
           introspection-client-id: messenger-server
           introspection-client-secret: 8c52ccfb-4c15-4e4c-8e0b-a10f1cc978cd
-#        jwt:
-#          jwk-set-uri: http://localhost:8081/auth/realms/pegasus/protocol/openid-connect/certs
   datasource:
     url: jdbc:postgresql://localhost:5432/pegasus_messenger
     driver-class-name: org.postgresql.Driver
@@ -29,3 +27,8 @@ spring:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yml
     contexts: dev
+
+websocket:
+  message-broker-prefix: /topic
+  destination-prefix: /app
+  registry-endpoint: /socket
