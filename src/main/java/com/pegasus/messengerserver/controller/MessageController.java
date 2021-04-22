@@ -4,12 +4,10 @@ import com.pegasus.messengerserver.entity.Message;
 import com.pegasus.messengerserver.repository.MessageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -19,8 +17,7 @@ public class MessageController {
   private final MessageRepository messageRepository;
 
   @GetMapping
-  public List<Message> getAll(HttpServletResponse response) {
-    response.setHeader("Set-Cookie", "mycookie=hello; HttpOnly; SameSite=localhost; Path=/; Max-Age=99999999;");
+  public List<Message> getAll() {
     return messageRepository.findAll();
   }
 
@@ -47,7 +44,7 @@ public class MessageController {
     messageRepository.deleteById(id);
   }
 
-  @MessageMapping("/changeMessage")
+  @MessageMapping("/saveMessage")
   @SendTo("/topic/message")
   public Message saveMessage(Message message) {
     return messageRepository.save(message);
