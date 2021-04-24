@@ -31,14 +31,6 @@ public class MessageController {
     return messageRepository.save(message);
   }
 
-  @PutMapping("/{id}")
-  public Message update(
-    @PathVariable("id") Message messageFromDB,
-    @RequestBody Message message) {
-    BeanUtils.copyProperties(message, messageFromDB, "id");
-    return messageRepository.save(messageFromDB);
-  }
-
   @DeleteMapping("/{id}")
   public void delete(@PathVariable long id) {
     messageRepository.deleteById(id);
@@ -46,8 +38,16 @@ public class MessageController {
 
   @MessageMapping("/saveMessage")
   @SendTo("/topic/message")
-  public Message saveMessage(Message message) {
-    return messageRepository.save(message);
+  public Message saveMessage(Message dto) {
+    return messageRepository.save(dto);
+  }
+
+  @MessageMapping("/updateMessage")
+  @SendTo("/topic/message")
+  public Message updateMessage(Message message) {
+    Message messageFromDB = messageRepository.findById(message.getId()).get();
+    BeanUtils.copyProperties(message, messageFromDB, "id");
+    return messageRepository.save(messageFromDB);
   }
 
 }
