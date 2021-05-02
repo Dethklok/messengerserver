@@ -1,4 +1,4 @@
-package com.pegasus.messengerserver.config;
+package com.pegasus.messengerserver.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package com.pegasus.messengerserver.controller;
 
-import com.pegasus.messengerserver.entity.Message;
+import com.pegasus.messengerserver.domain.Message;
 import com.pegasus.messengerserver.repository.MessageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
