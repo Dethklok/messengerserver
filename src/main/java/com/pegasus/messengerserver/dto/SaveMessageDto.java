@@ -8,7 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter(AccessLevel.PROTECTED)
 @Getter(AccessLevel.PUBLIC)
-public class UpdateMessageDto {
+public class SaveMessageDto {
 
   String content;
 

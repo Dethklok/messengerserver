@@ -1,13 +1,18 @@
 package com.pegasus.messengerserver.controller;
 
-import com.pegasus.messengerserver.domain.Message;
+import com.pegasus.messengerserver.dto.MessageDto;
+import com.pegasus.messengerserver.dto.SaveMessageDto;
+import com.pegasus.messengerserver.dto.UpdateMessageDto;
 import com.pegasus.messengerserver.repository.MessageRepository;
+import com.pegasus.messengerserver.service.MessageService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -15,39 +20,40 @@ import java.util.List;
 @AllArgsConstructor
 public class MessageController {
   private final MessageRepository messageRepository;
+  private final MessageService messageService;
 
   @GetMapping
-  public List<Message> getAll() {
-    return messageRepository.findAll();
+  public List<MessageDto> findAll() {
+    return messageService.findAll();
   }
 
   @GetMapping("/{id}")
-  public Message findOne(@PathVariable("id") Message message) {
-    return message;
+  public MessageDto findOne(@PathVariable("id") Long id) {
+    return messageService.findOne(id);
   }
 
   @PostMapping
-  public Message save(@RequestBody Message message) {
-    return messageRepository.save(message);
+  public MessageDto save(@RequestBody SaveMessageDto saveMessageDto) {
+    return messageService.save(saveMessageDto);
   }
 
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable long id) {
-    messageRepository.deleteById(id);
+  public void delete(@PathVariable Long id) {
+    messageService.delete(id);
   }
 
   @MessageMapping("/saveMessage")
   @SendTo("/topic/message")
-  public Message saveMessage(Message dto) {
-    return messageRepository.save(dto);
+  public MessageDto saveMessage(SaveMessageDto saveMessageDto, Principal principal) {
+    System.out.println(principal.getName());
+    return messageService.save(saveMessageDto);
   }
 
-  @MessageMapping("/updateMessage")
+  @MessageMapping("/updateMessage/{id}")
   @SendTo("/topic/message")
-  public Message updateMessage(Message message) {
-    Message messageFromDB = messageRepository.findById(message.getId()).get();
-    BeanUtils.copyProperties(message, messageFromDB, "id");
-    return messageRepository.save(messageFromDB);
+  public MessageDto updateMessage(@DestinationVariable Long id, @Payload UpdateMessageDto updateMessageDto,
+                                  Principal principal) {
+    return messageService.update(id, updateMessageDto);
   }
 
 }

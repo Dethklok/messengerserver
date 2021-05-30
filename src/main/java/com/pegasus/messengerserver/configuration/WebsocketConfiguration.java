@@ -3,6 +3,7 @@ package com.pegasus.messengerserver.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -19,9 +20,12 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
 @Configuration
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
+@Order(HIGHEST_PRECEDENCE + 50)
 public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
   private final OpaqueTokenAuthenticationProvider opaqueTokenAuthenticationProvider;
