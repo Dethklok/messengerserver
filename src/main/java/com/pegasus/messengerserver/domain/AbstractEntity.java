@@ -21,9 +21,6 @@ public abstract class AbstractEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @CreatedBy
-  private String userId;
-
   @CreatedDate
   private LocalDateTime createdAt;
 

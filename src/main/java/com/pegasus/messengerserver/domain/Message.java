@@ -4,6 +4,7 @@ import com.pegasus.messengerserver.projection.MessageProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -17,5 +18,8 @@ public class Message extends AbstractEntity implements Serializable, MessageProj
   private static final long serialVersionUID = 1L;
 
   private String content;
+
+  @CreatedBy
+  private String userId;
 
 }

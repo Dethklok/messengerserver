@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PROTECTED)
-public class MessageDto extends AbstractResponseDto implements MessageProjection {
+public class MessageDto extends AbstractResponseDto {
 
   private String content;
 
