@@ -8,6 +8,7 @@ import com.pegasus.messengerserver.projection.MessageProjection;
 import com.pegasus.messengerserver.repository.MessageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,9 +44,16 @@ public class MessageServiceImpl implements MessageService {
     return new MessageDto(savedMessage);
   }
 
+  @Transactional
   @Override
   public MessageDto update(Long id, UpdateMessageDto updateMessageDto) {
-    return null;
+    Message message = messageRepository.getOne(id);
+
+    message.setContent(updateMessageDto.getContent());
+
+    MessageProjection savedMessage = messageRepository.saveAndFlush(message);
+
+    return new MessageDto(savedMessage);
   }
 
   @Override

@@ -18,4 +18,10 @@ public interface MessageRepository extends Repository<Message, Long> {
   @Transactional
   MessageProjection save(Message message);
 
+  @Transactional
+  MessageProjection saveAndFlush(Message message);
+
+  @Transactional
+  Message getOne(Long id);
+
 }
