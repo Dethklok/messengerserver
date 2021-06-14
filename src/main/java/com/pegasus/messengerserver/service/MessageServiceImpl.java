@@ -51,6 +51,14 @@ public class MessageServiceImpl implements MessageService {
 
     message.setContent(updateMessageDto.getContent());
 
+    /*
+      The PreUpdate and PostUpdate callbacks occur before and after the database update operations to entity data
+      respectively. These database operations may occur at the time the entity state is updated or they may occur
+      at the time state is flushed to the database (which may be at the end of transaction).
+      And because of this we need to use saveAndFlush method, otherwise message.updatedAt won't be updated instantly
+      and method will return deprecated datetime.
+      @See section 3.5.3 of the http://download.oracle.com/otndocs/jcp/persistence-2_1-fr-eval-spec/index.html
+     */
     MessageProjection savedMessage = messageRepository.saveAndFlush(message);
 
     return new MessageDto(savedMessage);
