@@ -10,10 +10,10 @@ spring:
           introspection-client-id: messenger-server
           introspection-client-secret: 8c52ccfb-4c15-4e4c-8e0b-a10f1cc978cd
   datasource:
-    url: jdbc:postgresql://localhost:5432/pegasus_messenger
+    url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
-    username: pegasus
-    password: pegasus
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   jpa:
     properties:

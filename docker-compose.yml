@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  database:
+    container_name: database
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: messenger
+      POSTGRES_USER: pegasus
+      POSTGRES_PASSWORD: pegasus
+    restart: unless-stopped
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    ports:
+      - "8082:8082"
+    environment:
+      DATABASE_URL: jdbc:postgresql://database:5432/messenger
+      DATABASE_USERNAME: pegasus
+      DATABASE_PASSWORD: pegasus
